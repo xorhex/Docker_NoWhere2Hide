@@ -1,9 +1,7 @@
 FROM golang:1.22.2 AS build
 
-#RUN apk update && apk upgrade && apk add git
-RUN apt update && apt upgrade && apt install git
+RUN apt update && apt upgrade -y && apt install git
 
-#RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /app
 RUN groupadd -g 1010 appgroup
 RUN adduser appuser
 RUN usermod -aG appgroup appuser
