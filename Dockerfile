@@ -9,7 +9,8 @@ USER appuser
 WORKDIR /app
 
 
-RUN git clone https://github.com/c2links/NoWhere2Hide.git
+#RUN git clone https://github.com/c2links/NoWhere2Hide.git
+RUN git clone https://github.com/xorhex/NoWhere2Hide.git
 WORKDIR /app/NoWhere2Hide/main
 
 # Rebuild Go Modules as they need to be built with the same version of go as the program loading them
@@ -17,15 +18,6 @@ RUN ./rebuild_plugins.sh
 
 # Build NoWhere2Hide
 RUN go build -v -o NoWhere2Hide .
+RUN chmod u+x ./docker_start.sh
 
-WORKDIR /app/NoWhere2Hide
-
-# Update api keys
-RUN sed -i -r 's/censys_api_id: ""/censys_api_id: \"${CENSYS_API_ID}\"/g' api.yaml
-RUN sed -i -r 's/censys_secret: ""/censys_secret: \"${CENSYS_SECRET}\"/g' api.yaml
-RUN sed -i -r 's/shodan: ""/shodan: \"${SHODQN}\"/g' api.yaml
-RUN sed -i -r 's/huntio: ""/huntio: \"${HUNTIO}\"/g' api.yaml
-
-WORKDIR /app/NoWhere2Hide/main
-
-ENTRYPOINT ./NoWhere2Hide
+ENTRYPOINT ./docker_start.sh
